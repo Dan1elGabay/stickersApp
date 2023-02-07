@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 
 mongoose.set("strictQuery", false);
-mongoose.connect('mongodb://localhost:27017', { useNewUrlParser: true, dbName: 'Mongoose' },(console.log('DB is Connected'))).catch((err)=> console.log('Connection Failed',err))
+mongoose.connect('mongodb://localhost:27017', { useNewUrlParser: true, dbName: 'StickerApp',useUnifiedTopology: true })
+.then(() => {
+    console.log("Connected to the database!");
+  })
+  .catch(err => {
+    console.log("Cannot connect to the database!", err);
+    process.exit();
+  });
 
-
-
-// mongoose.
-// connect('mongodb://localhost:27017/',{useNewUrlParser: true,dbName:'orders'},).catch((err)=> console.log('Connection Failed',err))

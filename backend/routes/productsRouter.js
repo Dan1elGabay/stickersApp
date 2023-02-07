@@ -5,39 +5,39 @@ const router = express.Router();
 // this will connect to the database
 const connect = require('../data/database');
 
-// import the student model so we can use it in our routes
-const invoiceModel = require('../model/invoiceModel');
+// import the product model so we can use it in our routes
+const {productModel } = require('../model/productModel');
+
+
 
 // ====================================== ROUTES ======================================
 
-// Get all invoices
+// Get all items
 router.get('/', function(req, res) {
-    invoiceModel.find({})
-                .populate('items')
-                .exec(function(err,doc) {
-                  if(err){
-                    return res.status(500).send(err);
-                  }
-                  return res.status(200).json({found: doc});
+   productModel.find({}, function(err,doc){   // mongoose will actually run this for us:  db.students.find()
+      if(err){
+        return res.status(500).send(err);
+      }
+      return res.status(200).json({found: doc});
     })
   });
 
 // ------------------------------------------------------------------------------------
 
-// Get a (single) invoice by id
+// Get a (single) item by id
 
 router.get('/:id', function(req,res) {
   const id = req.params.id;
-  invoiceModel.findById(id, (err,doc) => {
+ productModel.findById(id, (err,doc) => {
     if(err){
       return res.status(500).json({error: err.message});
     }
 
     if(!doc){
-      console.log(`- couldn't find invoice with id '${id}'`);
-      return res.status(404).json({error: `couldn't find invoice with id '${id}'`});
+      console.log(`- couldn't find item with id '${id}'`);
+      return res.status(404).json({error: `couldn't find item with id '${id}'`});
     }
-
+    
     return res
     .status(200)
     .json({found: doc})
@@ -46,46 +46,36 @@ router.get('/:id', function(req,res) {
 
 // ------------------------------------------------------------------------------------
 
-// Add an invoice
+// Add an item
 router.post('/', function(req,res) {
       // Create a new student model with the values we want
-      const newInvoice = new invoiceModel ({
-        clientName: req.body.clientName,
-        items: [],
+      const newItem = newproductModel ({
+        name: req.body.name,
+        price: parseInt(req.body.price),
       })
 
-      /*
-      if(!Array.isArray(req.body.items)) {
-        req.body.items = [req.body.items]
-      }
-      */
-      
-      req.body.items.forEach(item => {
-        newInvoice.items.push(mongoose.Types.ObjectId(item))
-      });
-
       // Save the new student to the database
-      newInvoice.save().then(() => {
-        console.log('+ new invoice added successfully');
+      newItem.save().then(() => {
+        console.log('+ new item added successfully');
         res
         .status(200)
         .json({
           message: 'successfully added',
-          inserted: newInvoice
+          inserted: newItem
         })
     })
 })
 
 // ------------------------------------------------------------------------------------
 
-/*
+
 
 // Update a student
 router.put('/:id', function(req,res) {
   const id = req.params.id;
   const data = req.body;
 
-  studentModel.findByIdAndUpdate(id, data, {new:true}, (err,doc) => {   // Find a student by id, and update its value with 'data' object
+  productModel.findByIdAndUpdate(id, data, {new:true}, (err,doc) => {   // Find a student by id, and update its value with 'data' object
 
     // Check if there was an error
     if(err){
@@ -134,6 +124,6 @@ router.delete('/:id', function(req,res) {
   })
 })
 
-*/
+
 
 module.exports = router;

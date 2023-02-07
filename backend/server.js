@@ -3,9 +3,9 @@ require('dotenv').config();
 
 //* require and activate express
 const express = require('express');
+const app = express();
 const path = require('path');
 
-const app = express();
 // *console.log(process.env.SERVER_PORT);
 
 // //* static folder
@@ -14,11 +14,6 @@ const app = express();
 //* ===  Cors-handle different GET routes === //
 const cors = require('cors');
 app.use(cors());
-
-const mongoose = require('mongoose');
-
-
-
 //* === body-parser  === //
 const bodyParser = require('body-parser');
 //* enable express to parse html FORM data inside the request body
@@ -29,11 +24,23 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 
-//* === Routs === //
+const multer = require('multer');
+ 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+ 
+const upload = multer({ storage: storage });
 
+//* === Routes === //
 const indexRouter = require('./routes/index'); app.use('/',indexRouter);
-const invoicesRouter = require('./routes/invoicesRouter'); app.use('/api/invoices',invoicesRouter);
-const itemsRouter = require('./routes/itemsRouter'); app.use('/api/items',itemsRouter);
+const productsRouter = require('./routes/productsRouter'); app.use('/api/products',productsRouter);
+
 
 
 //* === run the server (on port 5000) === //
