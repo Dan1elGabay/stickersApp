@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+require('dotenv').config()
+
 
 mongoose.set("strictQuery", false);
-mongoose.connect('mongodb://localhost:27017', { useNewUrlParser: true, dbName: 'StickerApp',useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, dbName: 'StickerApp',useUnifiedTopology: true })
 .then(() => {
     console.log("Connected to the database!");
   })

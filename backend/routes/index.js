@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Server root route
 router.get('/', (req,res,next) => {
-    res.status(200).json({message: 'Welcome to our Mongoose Demo server root !'});
+    res.status(200).json({message: 'Welcome to our StickerAPP server root !'});
 })
 
 module.exports = router;

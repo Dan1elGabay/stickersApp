@@ -20,6 +20,12 @@ export default function Main() {
       });
     }, []);
 
+    //todo to create new product: 
+    /*
+ const updateDate = (newData)=>{
+  setData(...data,)
+ }*/
+
     const selectedProductFunc = (product) =>{
         console.log(`${product[0].description} is the selected product`);
         setSelectedProduct(product)
