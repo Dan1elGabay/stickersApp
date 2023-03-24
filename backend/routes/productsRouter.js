@@ -23,7 +23,7 @@ router.patch("/:id", upload.single("image"), async function (req, res) {
   const id = req.params.id;
   const { imagePath } = req.body;
   const data = req.body;
-
+  
   productModel.findByIdAndUpdate(
     id,
     { ...data, imagePath: req.file.path.replace("\\","/") },
@@ -81,14 +81,16 @@ router.get("/:id", function (req, res) {
 
 // Add a Product
 router.post("/", upload.single("image"), function (req, res) {
+  
+
   const newProduct = new productModel({
     cn_s2p: req.body.cn_s2p,
     description: req.body.description,
-    cn_client: req.body.client,
+    cn_client: req.body.cn_client,
     company: req.body.company,
     isEdited: false,
     isActive: true,
-    imagePath: req.file.path,
+    imagePath: req.file.path.replace("\\","/"),
     image:null
   });
 
